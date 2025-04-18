@@ -130,7 +130,7 @@ You may also configure these options with environment variables. The settings se
 This table contains all the configuration settings you may specify with both environment variables and the JSON config file.
 
 | Environment Variable               | JSON Property                | Required                    | Type                       | Description                                                                                                                                                                                                                                                                                                                                                                          |
-|------------------------------------|------------------------------|-----------------------------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------------------- | ---------------------------- | --------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | DISCORD_TOKEN                      | `token`                      | Yes.                        | `string`                   | The bot's token.                                                                                                                                                                                                                                                                                                                                                                     |
 | DISCORD_PREFIX                     | `prefix`                     | No. (Defaults to: `$`)      | `string`                   | **Deprecated**: The bot's prefix. A prefix is no longer necessary because this bot uses the all new interactions (slash commands).                                                                                                                                                                                                                                                   |
 | DISCORD_OWNER_ID                   | `owner_id`                   | No. (Defaults to: `null`)   | `string` or `null`         | The ID of the bot's owner.                                                                                                                                                                                                                                                                                                                                                           |
@@ -199,43 +199,58 @@ You can now go back to your app's *Overview*, make sure you disable the *web* dy
 
 Here's a list of all the commands for the bot:
 
-| Command                                   | Alias     | Description                                                                                         | Required Permissions |
-|-------------------------------------------|-----------|-----------------------------------------------------------------------------------------------------|----------------------|
-| /say \<message\>                          | /s        | Send a TTS message in your voice channel with your own settings or the ones saved for this server.  |                      |
-| /stop                                     | /leave    | Stop the TTS bot and leave the channel.                                                             |                      |
-| /default_settings                         |           | Get the default TTS settings currently set for the guild.                                           |                      |
-| /my_settings                              |           | Get the TTS settings you currently have set for yourself.                                           |                      |
-| /set_default_provider \<provider\>        |           | Sets the provider to be used by the say command for the server by default.                          | `MANAGE_GUILD`       |
-| /set_my_provider \<provider\>             |           | Sets the provider to be used by the say command for yourself.                                       |                      |
-| /set_locale \<locale\>                    |           | Sets locale to be used by the bot in this guild.                                                    | `MANAGE_GUILD`       |
-| /set_timeout \<timeout\>                  |           | Sets the timeout for the bot to leave the channel when not in use.                                  | `MANAGE_GUILD`       |
-| /google_langs                             |           | Display a list of the languages supported by the Google Translate provider.                         |                      |
-| /google_say \<message\>                   |           | Send a Google Translate TTS message with multi-language support in your voice channel.              |                      |
-| /google_set_default language \<language\> |           | Sets the language to be used by the say and google_say command by default.                          | `MANAGE_GUILD`       |
-| /google_set_default speed \<speed\>       |           | Sets the speed to be used by the say and google_say command by default.                             | `MANAGE_GUILD`       |
-| /google_set_my language \<language\>      |           | Sets the language to be used by the say and google_say command for yourself.                        |                      |
-| /google_set_my speed \<speed\>            |           | Sets the speed to be used by the say and google_say command for yourself.                           |                      |
-| /help                                     |           | Display a help message with all the available commands.                                             |                      |
-| /aeiou_say \<message\>                    |           | Send an aeiou (sounds like Stephen Hawking) TTS message in your voice channel.                      |                      |
+| Command                                   | Alias  | Description                                                                                        | Required Permissions |
+| ----------------------------------------- | ------ | -------------------------------------------------------------------------------------------------- | -------------------- |
+| /say \<message\>                          | /s     | Send a TTS message in your voice channel with your own settings or the ones saved for this server. |                      |
+| /stop                                     | /leave | Stop the TTS bot and leave the channel.                                                            |                      |
+| /default_settings                         |        | Get the default TTS settings currently set for the guild.                                          |                      |
+| /my_settings                              |        | Get the TTS settings you currently have set for yourself.                                          |                      |
+| /set_default_provider \<provider\>        |        | Sets the provider to be used by the say command for the server by default.                         | `MANAGE_GUILD`       |
+| /set_my_provider \<provider\>             |        | Sets the provider to be used by the say command for yourself.                                      |                      |
+| /set_locale \<locale\>                    |        | Sets locale to be used by the bot in this guild.                                                   | `MANAGE_GUILD`       |
+| /set_timeout \<timeout\>                  |        | Sets the timeout for the bot to leave the channel when not in use.                                 | `MANAGE_GUILD`       |
+| /google_langs                             |        | Display a list of the languages supported by the Google Translate provider.                        |                      |
+| /google_say \<message\>                   |        | Send a Google Translate TTS message with multi-language support in your voice channel.             |                      |
+| /google_set_default language \<language\> |        | Sets the language to be used by the say and google_say command by default.                         | `MANAGE_GUILD`       |
+| /google_set_default speed \<speed\>       |        | Sets the speed to be used by the say and google_say command by default.                            | `MANAGE_GUILD`       |
+| /google_set_my language \<language\>      |        | Sets the language to be used by the say and google_say command for yourself.                       |                      |
+| /google_set_my speed \<speed\>            |        | Sets the speed to be used by the say and google_say command for yourself.                          |                      |
+| /help                                     |        | Display a help message with all the available commands.                                            |                      |
+| /aeiou_say \<message\>                    |        | Send an aeiou (sounds like Stephen Hawking) TTS message in your voice channel.                     |                      |
 
 If you have `enable_tts_channels` set to `true`, you will have access to the additional commands:
 
 | Command                                   | Description                                                                      | Required Permissions |
-|-------------------------------------------|----------------------------------------------------------------------------------|----------------------|
+| ----------------------------------------- | -------------------------------------------------------------------------------- | -------------------- |
 | /channel_settings                         | Get the TTS settings associated to this channel (if applies).                    |                      |
 | /delete_channel_provider                  | Disable message-only based TTS on this channel (deletes its saved settings).     | `MANAGE_CHANNELS`    |
 | /set_channel_provider \<provider\>        | Sets the provider to be used by the message-only based TTS on specific channels. | `MANAGE_CHANNELS`    |
 | /google_set_channel language \<language\> | Sets the language to be used by the say and google_say command by default.       | `MANAGE_CHANNELS`    |
-| /google_set_channel speed \<speed\>       | Sets the speed to be used by the say and google_say command by default.          | `MANAGE_CHANNELS`    | 
+| /google_set_channel speed \<speed\>       | Sets the speed to be used by the say and google_say command by default.          | `MANAGE_CHANNELS`    |
 
 > Up until now, these settings are saved in memory, which means if the bot crashes/restarts, all of these settings will go back to default (`Language: English, Speed: normal`).
+
+## Recent Changes
+
+### Voice Channel Behavior
+
+The bot's behavior when handling voice channel connections has been updated:
+
+- When a user is not in a voice channel, the bot will silently ignore the command without sending any message
+- When a user is in a different voice channel than the bot, the bot will silently ignore the command without sending any message
+- When the bot cannot connect to a voice channel for other reasons (permissions issues, etc.), it will still send an ephemeral message explaining the issue
+
+### Development Changes
+
+- ESLint has been removed from the project to simplify development
+- The codebase has been cleaned up to remove ESLint-related comments and configurations
 
 ## Language Support
 
 Here's a list of all the supported languages by the Google Translate provider:
 
 | Language Code | Language Name |
-|---------------|---------------|
+| ------------- | ------------- |
 | af            | Afrikaans     |
 | hy            | Armenian      |
 | id            | Indonesian    |
