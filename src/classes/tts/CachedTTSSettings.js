@@ -1,7 +1,7 @@
-/* eslint-disable max-params */
-const { Collection, Guild, GuildMember, Channel } = require('discord.js');
-const ProviderManager = require('./providers/ProviderManager');
-const merge = require('deepmerge');
+const { Collection, Guild, GuildMember, Channel } = require("discord.js");
+const ProviderManager = require("./providers/ProviderManager");
+const merge = require("deepmerge");
+const logger = require("@greencoast/logger");
 
 class CachedTTSSettings {
   constructor(client) {
@@ -15,7 +15,7 @@ class CachedTTSSettings {
   }
 
   initialize() {
-    this.client.on('channelDelete', async(channel) => {
+    this.client.on("channelDelete", async (channel) => {
       if (!channel.guild) {
         return;
       }
@@ -23,8 +23,11 @@ class CachedTTSSettings {
       try {
         await this.delete(channel);
       } catch (error) {
-        this.client.emit('warn', `Could not delete settings for channel ${channel.id}. Most likely no settings were saved for this channel in the first place. If this is the case then it is safe to ignore this warning.`);
-        this.client.emit('error', error);
+        this.client.emit(
+          "warn",
+          `Could not delete settings for channel ${channel.id}. Most likely no settings were saved for this channel in the first place. If this is the case then it is safe to ignore this warning.`,
+        );
+        this.client.emit("error", error);
       }
     });
   }
@@ -56,14 +59,18 @@ class CachedTTSSettings {
       return this._get(key, this.guildCache, entity);
     }
 
-    throw new Error('Invalid entity instance passed to CachedTTSSettings.get');
+    throw new Error("Invalid entity instance passed to CachedTTSSettings.get");
   }
 
   async getCurrent(interaction) {
     const memberSettings = await this.get(interaction.member);
     const guildSettings = await this.get(interaction.guild);
 
-    return merge.all([ProviderManager.DEFAULT_SETTINGS, guildSettings, memberSettings]);
+    return merge.all([
+      ProviderManager.DEFAULT_SETTINGS,
+      guildSettings,
+      memberSettings,
+    ]);
   }
 
   async getCurrentForGuild(guild) {
@@ -101,7 +108,7 @@ class CachedTTSSettings {
       return this._set(key, settings, this.guildCache, entity);
     }
 
-    throw new Error('Invalid entity instance passed to CachedTTSSettings.get');
+    throw new Error("Invalid entity instance passed to CachedTTSSettings.get");
   }
 
   async _delete(key, cache, guild) {
@@ -124,7 +131,7 @@ class CachedTTSSettings {
       return this._delete(key, this.guildCache, entity);
     }
 
-    throw new Error('Invalid entity instance passed to CachedTTSSettings.get');
+    throw new Error("Invalid entity instance passed to CachedTTSSettings.get");
   }
 }
 

@@ -7,8 +7,6 @@
     "start": "node ./src/app.js",
     "debug": "node ./src/app.js --debug",
     "dev": "nodemon --exec npm start",
-    "lint:errors-only": "node_modules/.bin/eslint src --quiet",
-    "lint": "node_modules/.bin/eslint src",
     "deploy": "node ./src/command-deployer.js",
     "start-sharded": "node ./src/sharded-client.js"
   },
@@ -40,8 +38,6 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-greencoast": "^0.0.2",
     "nodemon": "^2.0.15"
   }
 }

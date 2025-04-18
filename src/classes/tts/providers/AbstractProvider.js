@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 /**
  * This class represents an abstract TTS provider. Any TTS provider should create a concrete implementation of this class.
  * @params {TTSClient} client The client that this provider will serve. Get any secrets (if required) from its config.
@@ -7,7 +5,7 @@
 class AbstractProvider {
   constructor(client) {
     if (new.target === AbstractProvider) {
-      throw new TypeError('Cannot instantiate AbstractProvider!');
+      throw new TypeError("Cannot instantiate AbstractProvider!");
     }
   }
 
@@ -18,7 +16,7 @@ class AbstractProvider {
    * @returns {Promise<Payload> | Promise<Payload[]>} A promise that resolves to the TTS payload.
    */
   createPayload(sentence, extras) {
-    throw new Error('Method not implemented!');
+    throw new Error("Method not implemented!");
   }
 
   /**
@@ -28,7 +26,7 @@ class AbstractProvider {
    * @returns {string} The message to log once the TTS message has been played.
    */
   getPlayLogMessage(payload, guild) {
-    throw new Error('Method not implemented!');
+    throw new Error("Method not implemented!");
   }
 }
 

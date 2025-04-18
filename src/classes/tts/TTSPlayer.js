@@ -1,7 +1,7 @@
-const logger = require('@greencoast/logger');
-const { createAudioResource } = require('@discordjs/voice');
-const Queue = require('../Queue');
-const VoiceManager = require('../VoiceManager');
+const logger = require("@greencoast/logger");
+const { createAudioResource } = require("@discordjs/voice");
+const Queue = require("../Queue");
+const VoiceManager = require("../VoiceManager");
 
 class TTSPlayer {
   constructor(client, guild, disconnectScheduler) {
@@ -19,13 +19,13 @@ class TTSPlayer {
   }
 
   initializePlayer() {
-    this.voice.player.on('error', (error) => {
+    this.voice.player.on("error", (error) => {
       logger.error(error);
       this.speaking = false;
       this.play();
     });
 
-    this.voice.player.on('idle', () => {
+    this.voice.player.on("idle", () => {
       if (this.speaking) {
         this.speaking = false;
         this.play();
@@ -36,7 +36,9 @@ class TTSPlayer {
   initializeScheduler() {
     this.disconnectScheduler.set(() => {
       const channel = this.stop();
-      logger.warn(`Left ${channel.name} from ${this.guild.name} due to inactivity.`);
+      logger.warn(
+        `Left ${channel.name} from ${this.guild.name} due to inactivity.`,
+      );
     });
   }
 
@@ -44,8 +46,8 @@ class TTSPlayer {
     // URL Detector
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-    // Replace URL with SUS
-    const sanitizedSentence = sentence.replace(urlRegex, 'ඞ');
+    // Replace URLs with silence
+    const sanitizedSentence = sentence.replace(urlRegex, "...");
 
     const provider = this.providerManager.getProvider(providerName);
     const payload = await provider.createPayload(sanitizedSentence, extras);
@@ -74,11 +76,13 @@ class TTSPlayer {
     logger.info(provider.getPlayLogMessage(payload, this.guild));
 
     this.speaking = true;
-    this.voice.play(createAudioResource(payload.resource, {
-      metadata: {
-        title: payload.sentence
-      }
-    }));
+    this.voice.play(
+      createAudioResource(payload.resource, {
+        metadata: {
+          title: payload.sentence,
+        },
+      }),
+    );
   }
 
   skip() {
@@ -109,7 +113,7 @@ class TTSPlayer {
     this.voice.disconnect();
     this.voice.player.stop(true);
 
-    return channel || { name: 'null' };
+    return channel || { name: "null" };
   }
 
   startDisconnectScheduler() {

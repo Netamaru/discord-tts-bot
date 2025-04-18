@@ -1,9 +1,8 @@
-/* eslint-disable max-statements */
-const { SlashCommand } = require('@greencoast/discord.js-extended');
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const logger = require('@greencoast/logger');
-const { getCantConnectToChannelReason } = require('../../utils/channel');
-const { cleanMessage } = require('../../utils/mentions');
+const { SlashCommand } = require("@greencoast/discord.js-extended");
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const logger = require("@greencoast/logger");
+const { getCantConnectToChannelReason } = require("../../utils/channel");
+const { cleanMessage } = require("../../utils/mentions");
 
 class SayBaseCommand extends SlashCommand {
   constructor(client, options) {
@@ -13,18 +12,17 @@ class SayBaseCommand extends SlashCommand {
       emoji: options.emoji,
       group: options.group,
       guildOnly: true,
-      dataBuilder: new SlashCommandBuilder()
-        .addStringOption((input) => {
-          return input
-            .setName('message')
-            .setDescription('The message to say in your voice channel.')
-            .setRequired(true);
-        })
+      dataBuilder: new SlashCommandBuilder().addStringOption((input) => {
+        return input
+          .setName("message")
+          .setDescription("The message to say in your voice channel.")
+          .setRequired(true);
+      }),
     });
   }
 
   getProviderName() {
-    throw new Error('getProviderName() not implemented!');
+    throw new Error("getProviderName() not implemented!");
   }
 
   async run(interaction) {
@@ -34,33 +32,48 @@ class SayBaseCommand extends SlashCommand {
     const ttsPlayer = this.client.getTTSPlayer(interaction.guild);
     const connection = ttsPlayer.voice.getConnection();
 
-    const currentSettings = await this.client.ttsSettings.getCurrent(interaction);
+    const currentSettings = await this.client.ttsSettings.getCurrent(
+      interaction,
+    );
     const providerName = this.getProviderName(currentSettings);
     const extras = currentSettings[providerName];
 
-    const { me: { voice: myVoice }, name: guildName, members, channels, roles } = interaction.guild;
+    const {
+      me: { voice: myVoice },
+      name: guildName,
+      members,
+      channels,
+      roles,
+    } = interaction.guild;
     const { channel: memberChannel } = interaction.member.voice;
     const myChannel = myVoice?.channel;
 
-    const messageIntro = this.client.config.get('ENABLE_WHO_SAID') ? `${interaction.member.displayName} said ` : '';
-    const message = cleanMessage(`${messageIntro}${interaction.options.getString('message')}`, {
-      members: members.cache,
-      channels: channels.cache,
-      roles: roles.cache
-    });
+    const messageIntro = this.client.config.get("ENABLE_WHO_SAID")
+      ? `${interaction.member.displayName} said `
+      : "";
+    const message = cleanMessage(
+      `${messageIntro}${interaction.options.getString("message")}`,
+      {
+        members: members.cache,
+        channels: channels.cache,
+        roles: roles.cache,
+      },
+    );
 
     if (!memberChannel) {
-      await interaction.editReply(localizer.t('command.say.no_channel'));
+      await interaction.editReply(localizer.t("command.say.no_channel"));
       return;
     }
 
     if (connection) {
       if (myChannel !== memberChannel) {
-        await interaction.editReply(localizer.t('command.say.different_channel'));
+        await interaction.editReply(
+          localizer.t("command.say.different_channel"),
+        );
         return;
       }
 
-      await interaction.editReply(localizer.t('command.say.success'));
+      await interaction.editReply(localizer.t("command.say.success"));
       return ttsPlayer.say(message, providerName, extras);
     }
 
@@ -72,7 +85,9 @@ class SayBaseCommand extends SlashCommand {
 
     await ttsPlayer.voice.connect(memberChannel);
     logger.info(`Joined ${memberChannel.name} in ${guildName}.`);
-    await interaction.editReply(localizer.t('command.say.joined', { channel: memberChannel.toString() }));
+    await interaction.editReply(
+      localizer.t("command.say.joined", { channel: memberChannel.toString() }),
+    );
     return ttsPlayer.say(message, providerName, extras);
   }
 }

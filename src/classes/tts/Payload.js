@@ -1,5 +1,3 @@
-/* eslint-disable max-params */
-
 /**
  * This class represents the data that is used to run the TTSPlayer.
  */
