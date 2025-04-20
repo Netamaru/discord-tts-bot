@@ -89,12 +89,7 @@ const client = new TTSClient({
     defaultLocale: "en",
     localeStrings: locales,
   },
-  intents: [
-    "GUILD_MESSAGES",
-    "GUILDS",
-    "GUILD_VOICE_STATES",
-    "GUILD_MESSAGE_CONTENT",
-  ],
+  intents: ["GUILD_MESSAGES", "GUILDS", "GUILD_VOICE_STATES"],
 });
 
 client.registerDefaultEvents().registerExtraDefaultEvents();
