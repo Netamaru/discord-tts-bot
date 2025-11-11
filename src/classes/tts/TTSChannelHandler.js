@@ -101,10 +101,24 @@ class TTSChannelHandler {
     const messageIntro = this.client.config.get("ENABLE_WHO_SAID")
       ? `${message.member.displayName} said `
       : "";
+    // Use message.mentions for accurate mention resolution
+    const mentionedMembers = message.mentions.members || new Map();
+    const mentionedChannels = message.mentions.channels || new Map();
+    const mentionedRoles = message.mentions.roles || new Map();
+    const mentionedUsers = message.mentions.users || new Map();
+
+    // Fallback to cache if mentions are empty (shouldn't happen, but just in case)
+    const membersToUse =
+      mentionedMembers.size > 0 ? mentionedMembers : members.cache;
+    const channelsToUse =
+      mentionedChannels.size > 0 ? mentionedChannels : channels.cache;
+    const rolesToUse = mentionedRoles.size > 0 ? mentionedRoles : roles.cache;
+
     const textToSay = cleanMessage(`${messageIntro}${message.content}`, {
-      members: members.cache,
-      channels: channels.cache,
-      roles: roles.cache,
+      members: membersToUse,
+      channels: channelsToUse,
+      roles: rolesToUse,
+      users: mentionedUsers,
     });
 
     if (!memberChannel) {
