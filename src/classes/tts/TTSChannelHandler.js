@@ -102,17 +102,37 @@ class TTSChannelHandler {
       ? `${message.member.displayName} said `
       : "";
     // Use message.mentions for accurate mention resolution
-    const mentionedMembers = message.mentions.members || new Map();
-    const mentionedChannels = message.mentions.channels || new Map();
-    const mentionedRoles = message.mentions.roles || new Map();
-    const mentionedUsers = message.mentions.users || new Map();
+    // message.mentions is based on the original message, so it should have all mentions
+    const mentionedMembers = message.mentions.members || null;
+    const mentionedChannels = message.mentions.channels || null;
+    const mentionedRoles = message.mentions.roles || null;
+    const mentionedUsers = message.mentions.users || null;
 
-    // Fallback to cache if mentions are empty (shouldn't happen, but just in case)
+    // Build a members collection from mentions, falling back to cache lookup if needed
     const membersToUse =
-      mentionedMembers.size > 0 ? mentionedMembers : members.cache;
+      mentionedMembers && mentionedMembers.size > 0
+        ? mentionedMembers
+        : (() => {
+            // If no mentions, create empty collection
+            // Otherwise, build from mentioned user IDs using cache
+            const membersCollection = new Map();
+            if (mentionedUsers && mentionedUsers.size > 0) {
+              mentionedUsers.forEach((user, id) => {
+                const member = members.cache.get(id);
+                if (member) {
+                  membersCollection.set(id, member);
+                }
+              });
+            }
+            return membersCollection;
+          })();
+
     const channelsToUse =
-      mentionedChannels.size > 0 ? mentionedChannels : channels.cache;
-    const rolesToUse = mentionedRoles.size > 0 ? mentionedRoles : roles.cache;
+      mentionedChannels && mentionedChannels.size > 0
+        ? mentionedChannels
+        : new Map();
+    const rolesToUse =
+      mentionedRoles && mentionedRoles.size > 0 ? mentionedRoles : new Map();
 
     const textToSay = cleanMessage(`${messageIntro}${message.content}`, {
       members: membersToUse,
